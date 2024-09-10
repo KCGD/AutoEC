@@ -1,0 +1,18 @@
+[].slice.call(HTMLcollection) ==> elemnt array
+
+document.querySelector('[id^=question_text_]').id 	                                                gets question text field (needs to be fed into document.getElementId)
+    .parentElement.parentElement.parentElement.nextElementSibling.nextElementSibling.children[0]    gets question field for multiple choice
+        .children[0]                                                                                gets text field if text input     
+        .children[0].children                                                                       gets the multiple choice fields for multiple choice question
+            .children[0].children[0]                                                                    gets checkbox
+            .children[0].children[1].innerText                                                          gets question text
+
+
+//stores all question elements in questionElements
+var spans = [].slice.call(document.getElementsByTagName("span"));
+var questionElements = [];
+for(let i = 0; i < spans.length; i++) {
+    if(spans[i].id && spans[i].id.includes("question_text")) {
+        console.log(questionElements.push(document.getElementById(spans[i].id)));
+    }
+}

@@ -1,79 +1,60 @@
-/*
-
-[].slice.call(HTMLcollection) ==> elemnt array
-
-document.querySelector('[id^=question_text_]').id 	                                                gets question text field (needs to be fed into document.getElementId)
-    .parentElement.parentElement.parentElement.nextElementSibling.nextElementSibling.children[0]    gets question field for multiple choice
-        .children[0]                                                                                gets text field if text input     
-        .children[0].children                                                                       gets the multiple choice fields for multiple choice question
-            .children[0].children[0]                                                                    gets checkbox
-            .children[0].children[1].innerText                                                          gets question text
-
-
-//stores all question elements in questionElements
-var spans = [].slice.call(document.getElementsByTagName("span"));
-var questionElements = [];
-for(let i = 0; i < spans.length; i++) {
-    if(spans[i].id && spans[i].id.includes("question_text")) {
-        console.log(questionElements.push(document.getElementById(spans[i].id)));
-    }
-}
-
-
-
-*/
-
-
-var info = {
+/**
+ * Fill this out with your relevant info before running
+ *  Only edit the "values" fields. DONT EDIT THE QUANTIFIERS (It'll break the script)
+ * 
+ * After you are done editing this file:
+ *  1. open the EC form (make sure you can see the questions)
+ *  2. paste this whole file into your dev console (open with Ctrl+Shift+K)
+ *  3. hit enter to run it
+ * 
+ * This will automatically fill out the most common fields in the EC form. Make sure there aren't any special ones the script missed!
+ * If all are filled out, submit the form, and you are good to go!
+ */
+const info = {
     firstname: {
-        value: "Your first name",
+        value: "Your first name", //first name
         quantifiers: ["First", "name"]
     },
     lastname: {
-        value: "Your last name",
+        value: "Your last name", //last name
         quantifiers: ["Last", "name"]
     },
     cwid: {
-        value: "Your CWID",
+        value: "Your CWID", //campus wide ID
         quantifiers: ["Campus Wide ID", "CWID", "ID"]
     },
     studentType: {
-        value: "Your undergraduateness",
+        value: "Your undergraduateness", //undergraduate / graduate
         quantifiers: ["am an undergraduate student"]
     },
     email: {
-        value: "Your email",
+        value: "Your email", //your email
         quantifiers: ["STEVENS EMAIL", "email"]
     },
     phonenumber: {
-        value: "Your phone number",
+        value: "Your phone number", //your phone number
         quantifiers: ["Phone number", "phone", "Cell Phone"]
     }
 }
 
 
-//the main shit
 var run = function() {
     let questions = getQuestions();
-    let infoKeys = Object.keys(info);
 
     for(var i = 0; i < questions.length; i++) {
         let question = questions[i];
         let questionText = question.innerHTML;
 
-        //test
         if(answerElementIsText(getAnswerElement(question))) {
             //is text element
             getAnswerElement(question).value = info[findRelaventKey(info, questionText)[0]].value;
         } else {
             //is multiple choice element
             let choices = getAnswerElement(question).children;
-            //console.log(choices);
             let highest = 0;
             for(let ii = 0; ii < choices.length; ii++) {
                 let choice = choices[ii];
                 let result = findRelaventKey(info, getMultChoiceText(choice));
-                //console.log(getMultChoiceText(choice), result);
                 if(result[1] > 0 && result[1] > highest) {
                     selectMultipleChoice(choice);
                     highest = result[1];
